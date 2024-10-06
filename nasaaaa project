@@ -1,0 +1,36 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Load GISTEMP data
+gistemp_data = pd.read_csv('https://data.giss.nasa.gov/gistemp/tabledata_v4/GLB.Ts+dSST.csv')
+
+# Load Sea Level Rise data
+sea_level_data = pd.read_csv('https://climate.nasa.gov/system/internal_resources/details/original/647_Global_Mean_Sea_Level.csv')
+
+# Convert date columns to datetime format
+gistemp_data['Date'] = pd.to_datetime(gistemp_data['Date'])
+sea_level_data['Date'] = pd.to_datetime(sea_level_data['Date'])
+
+# Plot global temperature anomalies
+plt.figure(figsize=(10, 6))
+plt.plot(gistemp_data['Date'], gistemp_data['Anomaly'])
+plt.title('Global Temperature Anomalies (1880-2022)')
+plt.xlabel('Year')
+plt.ylabel('Temperature Anomaly (°C)')
+plt.show()
+
+# Plot global mean sea level
+plt.figure(figsize=(10, 6))
+plt.plot(sea_level_data['Date'], sea_level_data['GMSL'])
+plt.title('Global Mean Sea Level (1993-2022)')
+plt.xlabel('Year')
+plt.ylabel('Sea Level (mm)')
+plt.show()
+
+# Calculate and print the average annual temperature increase
+avg_temp_increase = (gistemp_data['Anomaly'].iloc[-1] - gistemp_data['Anomaly'].iloc[0]) / (gistemp_data['Date'].iloc[-1].year - gistemp_data['Date'].iloc[0].year)
+print(f'Average annual temperature increase: {avg_temp_increase:.2f} °C/year')
+
+# Calculate and print the average annual sea level rise
+avg_sea_level_rise = (sea_level_data['GMSL'].iloc[-1] - sea_level_data['GMSL'].iloc[0]) / (sea_level_data['Date'].iloc[-1].year - sea_level_data['Date'].iloc[0].year)
+print(f'Average annual sea level rise: {avg_sea_level_rise:.2f} mm/year')
